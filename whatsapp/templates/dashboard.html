@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Express | Live WhatsApp Orders & Meta Catalog Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --bg-card: rgba(22, 30, 46, 0.7);
+      --bg-card-hover: rgba(30, 41, 64, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-green: #10b981;
+      --accent-blue: #3b82f6;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* Header Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      padding: 16px 28px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--accent-green);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 30px;
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #34d399;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .btn-refresh {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-refresh:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    /* Grid Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      padding: 22px;
+      border-radius: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-sub);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .stat-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Filters Bar */
+    .filters-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .tab-btn.catalog-tab-btn.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 280px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px 16px 12px 42px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-blue);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 16px;
+    }
+
+    /* Cards Grid */
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .order-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .order-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--card-border-status, #3b82f6);
+    }
+
+    .order-card:hover {
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .order-id {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .order-time {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-active_cart {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-out_for_delivery {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    .status-delivered {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-confirmed {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .customer-info {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .items-list {
+      margin-bottom: 20px;
+    }
+
+    .items-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .total-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 18px;
+    }
+
+    .total-label {
+      font-size: 13px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .total-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-green);
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-delivery {
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+      grid-column: span 2;
+    }
+
+    .btn-delivery:hover {
+      background: linear-gradient(135deg, #fb7185, #f43f5e);
+      transform: scale(1.02);
+    }
+
+    .btn-delivered {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+    }
+
+    .btn-reply {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-reply:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Meta Catalog Section Styles */
+    .catalog-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 18px 24px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .catalog-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .catalog-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .catalog-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .catalog-img-box {
+      width: 100%;
+      height: 170px;
+      position: relative;
+      background: #000;
+    }
+
+    .catalog-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .catalog-brand-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .catalog-stock-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .stock-in {
+      background: rgba(16, 185, 129, 0.85);
+      color: #fff;
+    }
+
+    .stock-out {
+      background: rgba(244, 63, 94, 0.85);
+      color: #fff;
+    }
+
+    .catalog-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .catalog-item-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .catalog-item-desc {
+      font-size: 12.5px;
+      color: var(--text-sub);
+      margin-bottom: 14px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .catalog-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 12px;
+    }
+
+    .catalog-price {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent-green);
+    }
+
+    .catalog-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-edit-price {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-delete-item {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    /* Modal for Reply & Add Product */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #121929;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 520px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .modal-subtitle {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .form-input, .form-select, .message-area {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-input:focus, .form-select:focus, .message-area:focus {
+      border-color: var(--accent-green);
+    }
+
+    .message-area {
+      height: 100px;
+      resize: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-sub);
+      grid-column: 1 / -1;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <div class="navbar">
+    <div class="brand">
+      <div class="brand-icon">🚴</div>
+      <div>
+        <div class="brand-title">FOOD EXPRESS</div>
+        <div class="brand-subtitle">Live WhatsApp Orders & Meta Catalog Console</div>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        LIVE SYNC ACTIVE
+      </div>
+      <button class="btn-refresh" onclick="refreshCurrentView()">
+        <span>🔄</span> Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <span>TOTAL REVENUE</span>
+        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">💵</div>
+      </div>
+      <div class="stat-val" id="stat-revenue">Rs. 0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span>ACTIVE CARTS</span>
+        <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">🛒</div>
+      </div>
+      <div class="stat-val" id="stat-carts">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span>OUT FOR DELIVERY</span>
+        <div class="stat-icon" style="background: rgba(244, 63, 94, 0.2); color: #fb7185;">🛵</div>
+      </div>
+      <div class="stat-val" id="stat-delivery">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <span>DELIVERED ORDERS</span>
+        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;">✅</div>
+      </div>
+      <div class="stat-val" id="stat-delivered">0</div>
+    </div>
+  </div>
+
+  <!-- Filters & Controls -->
+  <div class="filters-bar">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="setFilter('all', this)">All Orders</button>
+      <button class="tab-btn" onclick="setFilter('active_cart', this)">Active Carts 🛒</button>
+      <button class="tab-btn" onclick="setFilter('out_for_delivery', this)">Out for Delivery 🛵</button>
+      <button class="tab-btn" onclick="setFilter('delivered', this)">Delivered ✅</button>
+      <button class="tab-btn catalog-tab-btn" onclick="setFilter('catalog', this)">Meta Catalog 🛍️</button>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="Search orders or items..." oninput="handleSearch()">
+    </div>
+  </div>
+
+  <!-- Orders Display Container -->
+  <div class="orders-grid" id="orders-container">
+    <!-- Dynamic Cards Rendered Here -->
+  </div>
+
+  <!-- Meta Catalog Management Section (Hidden by default) -->
+  <div id="catalog-section" style="display: none;">
+    <div class="catalog-header-bar">
+      <div class="catalog-title">
+        <span>🛍️</span> Meta Commerce Catalog Items
+      </div>
+      <button class="btn-primary" onclick="openAddProductModal()">
+        <span>➕</span> Add New Catalog Product
+      </button>
+    </div>
+    <div class="catalog-grid" id="catalog-container">
+      <!-- Dynamic Meta Catalog Items Rendered Here -->
+    </div>
+  </div>
+
+  <!-- WhatsApp Reply Modal -->
+  <div class="modal-overlay" id="reply-modal">
+    <div class="modal-box">
+      <div class="modal-title">💬 Send WhatsApp Message</div>
+      <div class="modal-subtitle" id="modal-recipient-info">Replying to Customer...</div>
+      <input type="hidden" id="modal-wa-id">
+      <textarea class="message-area" id="modal-msg-input" placeholder="Type custom reply message here... (e.g. Your delivery rider is outside!)"></textarea>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeReplyModal()">Cancel</button>
+        <button class="btn-primary" onclick="sendReplyFromModal()">Send Message 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product to Meta Catalog Modal -->
+  <div class="modal-overlay" id="add-product-modal">
+    <div class="modal-box">
+      <div class="modal-title">🛍️ Add Product to Meta Catalog</div>
+      <div class="modal-subtitle">Item will be synced live with Meta Graph API & WhatsApp Menu</div>
+      
+      <div class="form-group">
+        <label class="form-label">Item Title / Name</label>
+        <input type="text" class="form-input" id="add-title" placeholder="e.g. Special Zinger Burger">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Restaurant / Brand</label>
+        <select class="form-select" id="add-brand">
+          <option value="Hungry Habibi">Hungry Habibi</option>
+          <option value="Mandi House Sorriso">Mandi House Sorriso</option>
+          <option value="Toronto Gyros">Toronto Gyros</option>
+          <option value="Kababjees">Kababjees</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Price (PKR)</label>
+        <input type="number" class="form-input" id="add-price" placeholder="e.g. 750">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-input" id="add-desc" placeholder="e.g. Crispy chicken patty with garlic sauce">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Image URL</label>
+        <input type="text" class="form-input" id="add-image" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeAddProductModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveNewCatalogProduct()">Save to Meta Catalog 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Price / Stock Modal -->
+  <div class="modal-overlay" id="edit-product-modal">
+    <div class="modal-box">
+      <div class="modal-title">✏️ Edit Meta Catalog Product</div>
+      <div class="modal-subtitle" id="edit-product-title">Updating item details...</div>
+      <input type="hidden" id="edit-product-id">
+
+      <div class="form-group">
+        <label class="form-label">Price (PKR)</label>
+        <input type="number" class="form-input" id="edit-price" placeholder="e.g. 650">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Availability / Stock</label>
+        <select class="form-select" id="edit-availability">
+          <option value="in stock">In Stock ✅</option>
+          <option value="out of stock">Out of Stock ❌</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeEditProductModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveEditCatalogProduct()">Update Product 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let rawData = { active_carts: [], orders: [] };
+    let catalogData = [];
+    let currentFilter = 'all';
+
+    async function refreshCurrentView() {
+      if (currentFilter === 'catalog') {
+        fetchCatalogData();
+      } else {
+        fetchDashboardData();
+      }
+    }
+
+    async function fetchDashboardData() {
+      try {
+        const res = await fetch('/api/dashboard/data');
+        if (res.ok) {
+          rawData = await res.json();
+          updateStats();
+          if (currentFilter !== 'catalog') {
+            renderOrders();
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err);
+      }
+    }
+
+    async function fetchCatalogData() {
+      try {
+        const res = await fetch('/api/dashboard/catalog');
+        if (res.ok) {
+          const data = await res.json();
+          catalogData = data.products || [];
+          renderCatalog();
+        }
+      } catch (err) {
+        console.error('Failed to fetch catalog data:', err);
+      }
+    }
+
+    function updateStats() {
+      const stats = rawData.stats || {};
+      document.getElementById('stat-revenue').innerText = `Rs. ${stats.total_revenue || 0}`;
+      document.getElementById('stat-carts').innerText = stats.active_carts_count || 0;
+      document.getElementById('stat-delivery').innerText = stats.out_for_delivery_count || 0;
+      document.getElementById('stat-delivered').innerText = stats.delivered_count || 0;
+    }
+
+    function setFilter(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const ordersContainer = document.getElementById('orders-container');
+      const catalogSection = document.getElementById('catalog-section');
+
+      if (filter === 'catalog') {
+        ordersContainer.style.display = 'none';
+        catalogSection.style.display = 'block';
+        fetchCatalogData();
+      } else {
+        catalogSection.style.display = 'none';
+        ordersContainer.style.display = 'grid';
+        renderOrders();
+      }
+    }
+
+    function handleSearch() {
+      if (currentFilter === 'catalog') {
+        renderCatalog();
+      } else {
+        renderOrders();
+      }
+    }
+
+    function renderOrders() {
+      const container = document.getElementById('orders-container');
+      const searchQuery = (document.getElementById('search-input').value || '').toLowerCase();
+      
+      let allItems = [];
+
+      (rawData.active_carts || []).forEach(cart => {
+        allItems.push({
+          type: 'cart',
+          id: `CART-${cart.wa_id.slice(-4)}`,
+          wa_id: cart.wa_id,
+          name: cart.name || 'Anonymous Customer',
+          phone: cart.phone || cart.wa_id,
+          email: cart.email || 'Pending email...',
+          restaurant: cart.restaurant_name || 'Browsing...',
+          items: cart.cart || [],
+          total: (cart.cart || []).reduce((acc, i) => acc + (i.price || 0), 0),
+          status: 'active_cart',
+          statusText: '🛒 Shopping Cart Active',
+          time: cart.updated_at || 'Just now'
+        });
+      });
+
+      (rawData.orders || []).forEach(order => {
+        allItems.push({
+          type: 'order',
+          id: order.order_id,
+          wa_id: order.wa_id,
+          name: order.name,
+          phone: order.phone,
+          email: order.email,
+          restaurant: order.restaurant_name,
+          items: order.items || [],
+          total: order.total_price || 0,
+          status: (order.status || 'confirmed').toLowerCase().replace(/ /g, '_'),
+          statusText: order.status || 'Confirmed',
+          time: order.created_at || 'Recently'
+        });
+      });
+
+      if (currentFilter !== 'all') {
+        allItems = allItems.filter(item => item.status === currentFilter);
+      }
+
+      if (searchQuery) {
+        allItems = allItems.filter(item => 
+          item.id.toLowerCase().includes(searchQuery) ||
+          item.name.toLowerCase().includes(searchQuery) ||
+          item.phone.toLowerCase().includes(searchQuery) ||
+          item.restaurant.toLowerCase().includes(searchQuery)
+        );
+      }
+
+      if (allItems.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🍽️</div>
+            <h3>No Orders or Active Carts Found</h3>
+            <p>New incoming customer carts and orders will appear here automatically.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = allItems.map(item => {
+        const itemsHtml = (item.items || []).map(i => `
+          <div class="item-row">
+            <span class="item-name">• ${i.title}</span>
+            <span class="item-price">Rs. ${i.price}</span>
+          </div>
+        `).join('');
+
+        const statusClass = `status-${item.status}`;
+        
+        let actionButtons = '';
+        if (item.type === 'order') {
+          if (item.status === 'out_for_delivery') {
+            actionButtons = `
+              <button class="btn-action btn-delivered" onclick="updateOrderStatus('${item.id}', 'Delivered')">
+                ✅ Mark Delivered
+              </button>
+              <button class="btn-action btn-reply" onclick="openReplyModal('${item.wa_id}', '${item.name}')">
+                💬 Reply WA
+              </button>
+            `;
+          } else if (item.status === 'delivered') {
+            actionButtons = `
+              <button class="btn-action btn-reply" style="grid-column: span 2;" onclick="openReplyModal('${item.wa_id}', '${item.name}')">
+                💬 Reply Customer on WhatsApp
+              </button>
+            `;
+          } else {
+            actionButtons = `
+              <button class="btn-action btn-delivery" onclick="updateOrderStatus('${item.id}', 'Out for Delivery')">
+                🛵 Mark Out for Delivery 🚴
+              </button>
+              <button class="btn-action btn-delivered" onclick="updateOrderStatus('${item.id}', 'Delivered')">
+                ✅ Delivered
+              </button>
+              <button class="btn-action btn-reply" onclick="openReplyModal('${item.wa_id}', '${item.name}')">
+                💬 Reply WA
+              </button>
+            `;
+          }
+        } else {
+          actionButtons = `
+            <button class="btn-action btn-reply" style="grid-column: span 2;" onclick="openReplyModal('${item.wa_id}', '${item.name}')">
+              💬 Send WhatsApp Message
+            </button>
+          `;
+        }
+
+        return `
+          <div class="order-card" style="--card-border-status: ${getBorderColor(item.status)}">
+            <div>
+              <div class="order-header">
+                <div>
+                  <div class="order-id">#${item.id}</div>
+                  <div class="order-time">🕒 ${item.time}</div>
+                </div>
+                <span class="status-badge ${statusClass}">${getStatusBadgeText(item.statusText)}</span>
+              </div>
+
+              <div class="customer-info">
+                <div class="info-row">👤 <strong>${item.name}</strong></div>
+                <div class="info-row">📞 ${item.phone}</div>
+                <div class="info-row">🏪 <strong>${item.restaurant}</strong></div>
+              </div>
+
+              <div class="items-list">
+                <div class="items-title">Ordered Items (${item.items.length})</div>
+                ${itemsHtml || '<div class="info-row">Selecting items...</div>'}
+              </div>
+            </div>
+
+            <div>
+              <div class="total-box">
+                <span class="total-label">Total Amount:</span>
+                <span class="total-price">Rs. ${item.total}</span>
+              </div>
+
+              <div class="action-buttons">
+                ${actionButtons}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCatalog() {
+      const container = document.getElementById('catalog-container');
+      const searchQuery = (document.getElementById('search-input').value || '').toLowerCase();
+
+      let items = catalogData;
+      if (searchQuery) {
+        items = items.filter(i => 
+          (i.name || '').toLowerCase().includes(searchQuery) ||
+          (i.brand || '').toLowerCase().includes(searchQuery) ||
+          (i.retailer_id || '').toLowerCase().includes(searchQuery)
+        );
+      }
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🛍️</div>
+            <h3>No Meta Catalog Products Found</h3>
+            <p>Click "Add New Catalog Product" to add items live to your Meta Catalog.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => {
+        const isStock = item.availability === 'in stock';
+        const rawPrice = item.price || 'PKR0';
+        const numPrice = rawPrice.replace(/[^0-9.]/g, '');
+
+        return `
+          <div class="catalog-card">
+            <div class="catalog-img-box">
+              <img class="catalog-img" src="${item.image_url}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600'">
+              <div class="catalog-brand-badge">${item.brand || 'Food Express'}</div>
+              <div class="catalog-stock-badge ${isStock ? 'stock-in' : 'stock-out'}">
+                ${isStock ? 'In Stock' : 'Out of Stock'}
+              </div>
+            </div>
+            <div class="catalog-body">
+              <div>
+                <div class="catalog-item-title">${item.name}</div>
+                <div class="catalog-item-desc">${item.description || 'No description provided'}</div>
+              </div>
+              <div class="catalog-footer">
+                <div class="catalog-price">${item.price}</div>
+                <div class="catalog-actions">
+                  <button class="btn-sm btn-edit-price" onclick="openEditProductModal('${item.id}', '${item.name}', '${numPrice}', '${item.availability}')">✏️ Edit</button>
+                  <button class="btn-sm btn-delete-item" onclick="deleteCatalogProduct('${item.id}', '${item.name}')">🗑️ Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getBorderColor(status) {
+      if (status === 'out_for_delivery') return '#f43f5e';
+      if (status === 'delivered') return '#10b981';
+      if (status === 'active_cart') return '#f59e0b';
+      return '#3b82f6';
+    }
+
+    function getStatusBadgeText(text) {
+      if (text.toLowerCase().includes('delivery')) return '🛵 Out For Delivery';
+      if (text.toLowerCase().includes('delivered')) return '✅ Delivered';
+      if (text.toLowerCase().includes('cart')) return '🛒 Active Cart';
+      return '📜 Confirmed';
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(`/api/dashboard/orders/${orderId}/status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus, send_whatsapp_alert: true })
+        });
+        if (res.ok) {
+          fetchDashboardData();
+        } else {
+          alert('Failed to update status.');
+        }
+      } catch (err) {
+        alert('Error updating status.');
+      }
+    }
+
+    function openReplyModal(waId, name) {
+      document.getElementById('modal-wa-id').value = waId;
+      document.getElementById('modal-recipient-info').innerText = `Replying to: ${name || waId} (${waId})`;
+      document.getElementById('modal-msg-input').value = '';
+      document.getElementById('reply-modal').classList.add('open');
+    }
+
+    function closeReplyModal() {
+      document.getElementById('reply-modal').classList.remove('open');
+    }
+
+    async function sendReplyFromModal() {
+      const waId = document.getElementById('modal-wa-id').value;
+      const msg = document.getElementById('modal-msg-input').value.trim();
+
+      if (!msg) {
+        alert('Please enter a message to send.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/dashboard/send-reply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wa_id: waId, message: msg })
+        });
+
+        if (res.ok) {
+          closeReplyModal();
+          alert('✅ Message sent to customer on WhatsApp!');
+        } else {
+          alert('Failed to send WhatsApp message.');
+        }
+      } catch (err) {
+        alert('Error sending message.');
+      }
+    }
+
+    /* Meta Catalog Modals & Actions */
+    function openAddProductModal() {
+      document.getElementById('add-title').value = '';
+      document.getElementById('add-price').value = '';
+      document.getElementById('add-desc').value = '';
+      document.getElementById('add-product-modal').classList.add('open');
+    }
+
+    function closeAddProductModal() {
+      document.getElementById('add-product-modal').classList.remove('open');
+    }
+
+    async function saveNewCatalogProduct() {
+      const name = document.getElementById('add-title').value.trim();
+      const brand = document.getElementById('add-brand').value;
+      const price = parseFloat(document.getElementById('add-price').value);
+      const description = document.getElementById('add-desc').value.trim();
+      const image_url = document.getElementById('add-image').value.trim();
+
+      if (!name || isNaN(price) || price <= 0) {
+        alert('Please enter a valid product name and price.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/dashboard/catalog/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, brand, price, description, image_url })
+        });
+
+        if (res.ok) {
+          closeAddProductModal();
+          fetchCatalogData();
+          alert('✅ Product added live to Meta Catalog & WhatsApp Menu!');
+        } else {
+          alert('Failed to add product to Meta Catalog.');
+        }
+      } catch (err) {
+        alert('Error adding catalog product.');
+      }
+    }
+
+    function openEditProductModal(id, title, price, availability) {
+      document.getElementById('edit-product-id').value = id;
+      document.getElementById('edit-product-title').innerText = `Editing: ${title}`;
+      document.getElementById('edit-price').value = price || '';
+      document.getElementById('edit-availability').value = availability || 'in stock';
+      document.getElementById('edit-product-modal').classList.add('open');
+    }
+
+    function closeEditProductModal() {
+      document.getElementById('edit-product-modal').classList.remove('open');
+    }
+
+    async function saveEditCatalogProduct() {
+      const productId = document.getElementById('edit-product-id').value;
+      const price = parseFloat(document.getElementById('edit-price').value);
+      const availability = document.getElementById('edit-availability').value;
+
+      try {
+        const res = await fetch(`/api/dashboard/catalog/${productId}/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ price, availability })
+        });
+
+        if (res.ok) {
+          closeEditProductModal();
+          fetchCatalogData();
+          alert('✅ Meta Catalog product updated live!');
+        } else {
+          alert('Failed to update Meta Catalog product.');
+        }
+      } catch (err) {
+        alert('Error updating catalog product.');
+      }
+    }
+
+    async function deleteCatalogProduct(productId, name) {
+      if (!confirm(`Are you sure you want to delete "${name}" from Meta Catalog?`)) return;
+
+      try {
+        const res = await fetch(`/api/dashboard/catalog/${productId}`, {
+          method: 'DELETE'
+        });
+
+        if (res.ok) {
+          fetchCatalogData();
+          alert('✅ Product deleted from Meta Catalog!');
+        } else {
+          alert('Failed to delete Meta Catalog product.');
+        }
+      } catch (err) {
+        alert('Error deleting product.');
+      }
+    }
+
+    // Initial Load & Auto Refresh every 3 seconds
+    fetchDashboardData();
+    setInterval(() => {
+      if (currentFilter !== 'catalog') {
+        fetchDashboardData();
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

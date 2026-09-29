@@ -1,0 +1,46 @@
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# --- Generated lead output ---------------------------------------------------
+# Scraped leads contain third-party business contact details. Never commit them.
+leads/
+leads_links_only/
+selenium_shopify_meta_scraper/leads/
+selenium_shopify_meta_scraper/leads_links_only/
+*_leads.json
+*_links.json
+shopify_leads.json
+*.xlsx
+*.xls
+*.csv
+*.zip
+# Excel lock files
+~$*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Databases
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Node (not used, but harmless)
+node_modules/
+dist/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
